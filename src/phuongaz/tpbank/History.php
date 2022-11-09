@@ -85,7 +85,7 @@ class History {
     public function getHistoryData() :array {
         $data = json_decode($this->raw_data, true);
         $history = [];
-        foreach($data["transactionInfos"] as $transaction) {
+        foreach($data as $transaction) {
             $history[] = [
                 "id" => $transaction["id"],
                 "arrangementId" => $transaction["arrangementId"],

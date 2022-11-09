@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phuongaz\tpbank\task;
 
 use phuongaz\tpbank\API;
@@ -23,7 +25,9 @@ class CheckTask extends Task {
             $token = json_decode($tokenJson, true)["access_token"];
             $this->api->setAccessToken($token);
         }
-        $history_data = json_decode($this->api->get_history($token, $this->api->getAccountNumber()), true)["transactionInfos"];
+        $history_data = json_decode($this->api->get_history($token, $this->api->getAccountNumber()), true);
+        if(!isset($history_data["transactionInfos"])) return;
+        $history_data = $history_data["transactionInfos"];
         if(count($this->cached_data) == 0) {
             $this->cached_data = $history_data;
         } else {
