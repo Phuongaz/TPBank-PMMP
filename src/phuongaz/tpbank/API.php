@@ -49,8 +49,7 @@ class API
         $this->access_token = $access_token;
     }
 
-    public function get_token($username, $password)
-    {
+    public function getToken($username, $password) :string {
         $url = "https://ebank.tpb.vn/gateway/api/auth/login";
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -84,12 +83,10 @@ class API
         curl_close($curl);
         return $resp;
     }
-    public function get_history($token, $stk_tpbank)
-    {
-        $ngay_bat_dau_check = date("Ymd");
-        $ngay_ket_thuc_check = date("Ymd");
-        // 	$ngay_bat_dau_check = '20220421';
-        // $ngay_ket_thuc_check = '20220428';
+
+    public function getHistoryRaw($token, $stk_tpbank) :string {
+        $start_day = date("Ymd");
+        $end_day = date("Ymd");
         $url = "https://ebank.tpb.vn/gateway/api/smart-search-presentation-service/v1/account-transactions/find";
 
         $curl = curl_init($url);
@@ -121,7 +118,7 @@ class API
         );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
-        $data = '{"accountNo":"' . $stk_tpbank . '","currency":"VND","fromDate":"' . $ngay_bat_dau_check . '","toDate":"' . $ngay_ket_thuc_check . '","keyword":""}';
+        $data = '{"accountNo":"' . $stk_tpbank . '","currency":"VND","fromDate":"' . $start_day . '","toDate":"' . $end_day . '","keyword":""}';
 
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
 

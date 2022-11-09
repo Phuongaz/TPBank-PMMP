@@ -21,11 +21,11 @@ class CheckTask extends Task {
     public function onRun() :void {
         $token = $this->api->getAccessToken();
         if($token == "") {
-            $tokenJson = $this->api->get_token($this->api->getAccount(), $this->api->getPassword());
+            $tokenJson = $this->api->getToken($this->api->getAccount(), $this->api->getPassword());
             $token = json_decode($tokenJson, true)["access_token"];
             $this->api->setAccessToken($token);
         }
-        $history_data = json_decode($this->api->get_history($token, $this->api->getAccountNumber()), true);
+        $history_data = json_decode($this->api->getHistoryRaw($token, $this->api->getAccountNumber()), true);
         if(!isset($history_data["transactionInfos"])) return;
         $history_data = $history_data["transactionInfos"];
         if(count($this->cached_data) == 0) {
