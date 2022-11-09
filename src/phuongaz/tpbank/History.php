@@ -85,20 +85,18 @@ class History {
     public function getHistoryData() :array {
         $data = json_decode($this->raw_data, true);
         $history = [];
-        foreach($data as $transaction) {
-            $history[] = [
-                "id" => $transaction["id"],
-                "arrangementId" => $transaction["arrangementId"],
-                "reference" => $transaction["reference"],
-                "description" => $transaction["description"],
-                "bookingDate" => $transaction["bookingDate"],
-                "valueDate" => $transaction["valueDate"],
-                "amount" => $transaction["amount"],
-                "currency" => $transaction["currency"],
-                "creditDebitIndicator" => $transaction["creditDebitIndicator"],
-                "runningBalance" => $transaction["runningBalance"]
-            ];
-        }
+        $history[] = [
+            "id" => $data["id"],
+            "arrangementId" => $data["arrangementId"],
+            "reference" => $data["reference"],
+            "description" => $data["description"],
+            "bookingDate" => $data["bookingDate"],
+            "valueDate" => $data["valueDate"],
+            "amount" => $data["amount"],
+            "currency" => $data["currency"],
+            "creditDebitIndicator" => $data["creditDebitIndicator"],
+            "runningBalance" => $data["runningBalance"]
+        ];
         return $history;
     }
 }
