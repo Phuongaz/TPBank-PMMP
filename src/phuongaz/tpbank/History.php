@@ -83,20 +83,6 @@ class History {
     }
 
     public function getHistoryData() :array {
-        $data = json_decode($this->raw_data, true);
-        $history = [];
-        $history[] = [
-            "id" => $data["id"],
-            "arrangementId" => $data["arrangementId"],
-            "reference" => $data["reference"],
-            "description" => $data["description"],
-            "bookingDate" => $data["bookingDate"],
-            "valueDate" => $data["valueDate"],
-            "amount" => $data["amount"],
-            "currency" => $data["currency"],
-            "creditDebitIndicator" => $data["creditDebitIndicator"],
-            "runningBalance" => $data["runningBalance"]
-        ];
-        return $history;
+        return json_decode($this->raw_data, true);
     }
 }
