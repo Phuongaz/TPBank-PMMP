@@ -5,8 +5,7 @@ namespace phuongaz\tpbank;
 use phuongaz\tpbank\task\CheckTask;
 use pocketmine\plugin\PluginBase;
 
-class API
-{
+class API {
 
     private string $account_number;
     private string $password;
@@ -49,7 +48,7 @@ class API
         $this->access_token = $access_token;
     }
 
-    public function getToken($username, $password) :string {
+    public function getToken($username, $password) :bool|string {
         $url = "https://ebank.tpb.vn/gateway/api/auth/login";
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -80,11 +79,12 @@ class API
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
         $resp = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
-        return $resp;
+        return ($httpcode == 200) ? $resp : false;
     }
 
-    public function getHistoryRaw($token, $stk_tpbank) :string {
+    public function getHistoryRaw($token, $stk_tpbank) :bool|string {
         $start_day = date("Ymd");
         $end_day = date("Ymd");
         $url = "https://ebank.tpb.vn/gateway/api/smart-search-presentation-service/v1/account-transactions/find";
@@ -127,8 +127,10 @@ class API
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
         $resp = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
-        return $resp;
+
+        return ($httpcode == 200) ? $resp : false;
     }
 
 }

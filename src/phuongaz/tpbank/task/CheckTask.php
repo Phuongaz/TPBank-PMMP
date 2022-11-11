@@ -12,6 +12,7 @@ use pocketmine\scheduler\Task;
 class CheckTask extends Task {
 
     private array $cached_data = [];
+
     private API $api;
 
     public function __construct(API $api) {
@@ -19,13 +20,18 @@ class CheckTask extends Task {
     }
 
     public function onRun() :void {
-        $token = $this->api->getAccessToken();
-        if($token == "") {
-            $tokenJson = $this->api->getToken($this->api->getAccount(), $this->api->getPassword());
-            $token = json_decode($tokenJson, true)["access_token"];
-            $this->api->setAccessToken($token);
+        $token = $this->loadAccessToken();
+        if($token == null) {
+            $this->api->getPlugin()->getLogger()->error("Can't get access token");
+            return;
         }
-        $history_data = json_decode($this->api->getHistoryRaw($token, $this->api->getAccountNumber()), true);
+        $historyRaw = $this->api->getHistoryRaw($token, $this->api->getAccountNumber());
+        if($historyRaw) {
+            $history_data = json_decode($historyRaw, true);
+        }else{
+            $this->loadAccessToken();  //Token has expired
+            return;
+        }
         if(!isset($history_data["transactionInfos"])) return;
         $history_data = $history_data["transactionInfos"];
         if(count($this->cached_data) == 0) {
@@ -43,5 +49,20 @@ class CheckTask extends Task {
                 }
             }
         }
+    }
+
+    public function loadAccessToken() :?string {
+        $token = $this->api->getAccessToken();
+        if($token == "") {
+            $tokenRaw = $this->api->getToken($this->api->getAccount(), $this->api->getPassword());
+            if($tokenRaw) {
+                $token = json_decode($tokenRaw, true);
+                $token = $token["access_token"];
+                $this->api->setAccessToken($token);
+            }else{
+                return null;
+            }
+        }
+        return $token;
     }
 }

@@ -13,10 +13,10 @@ public function onEnable() :void{
 
 Event
 ```php
-    public function onBank(\phuongaz\tpbank\TPBankEvent $event) :void{
-        /** @var \phuongaz\tpbank\History */
-        $history = $event->getHistory();
-    }
+public function onBank(\phuongaz\tpbank\TPBankEvent $event) :void{
+     /** @var \phuongaz\tpbank\History */
+     $history = $event->getHistory();
+}
 ```
 
-<img src="./img.png" width="1000" height="300" alt="TPBank-API">
+<img src="./img.png" width="1900" height="403" alt="TPBank-API">
