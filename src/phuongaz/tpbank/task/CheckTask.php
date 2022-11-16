@@ -29,7 +29,7 @@ class CheckTask extends Task {
         if($historyRaw) {
             $history_data = json_decode($historyRaw, true);
         }else{
-            $this->loadAccessToken();  //Token has expired
+            $this->loadAccessToken(true);  //Token has expired
             return;
         }
         if(!isset($history_data["transactionInfos"])) return;
@@ -51,9 +51,9 @@ class CheckTask extends Task {
         }
     }
 
-    public function loadAccessToken() :?string {
+    public function loadAccessToken(bool $expired = false) :?string {
         $token = $this->api->getAccessToken();
-        if($token == "") {
+        if($token == "" || $expired) {
             $tokenRaw = $this->api->getToken($this->api->getAccount(), $this->api->getPassword());
             if($tokenRaw) {
                 $token = json_decode($tokenRaw, true);
