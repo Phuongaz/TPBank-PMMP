@@ -68,6 +68,15 @@ class History {
         return $this->runningBalance;
     }
 
+    public function isDBIT() : bool {
+        $credit = $this->getCreditDebitIndicator();
+        return $credit == "DBIT";
+    }
+
+    public function isCRDT() : bool {
+        return !$this->isDBIT();
+    }
+
     public function parseHistory() :void {
         $data = json_decode($this->raw_data, true);
         $this->id = $data["id"];
